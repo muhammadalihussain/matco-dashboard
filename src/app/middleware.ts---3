@@ -1,0 +1,27 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { verifyToken } from "./lib/jwt";
+
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+
+  // If no token, redirect to login page
+  if (!token) {
+    return NextResponse.redirect(new URL("/", req.url));
+    // return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // Verify the token
+  const user = verifyToken(token);
+  if (!user) {
+    return NextResponse.redirect(new URL("/", req.url));
+    // return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  return NextResponse.next(); // Allow access to protected route
+}
+
+// Protect only specific routes
+export const config = {
+  matcher: ["/api/:path*"],
+};

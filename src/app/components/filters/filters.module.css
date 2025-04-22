@@ -1,0 +1,65 @@
+.container {
+  background-color: var(--bgSoft);
+  border-radius: 10px;
+
+  .form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box; /* Includes padding and border in width calculation */
+    padding: 20px; /* Example padding */
+    display: block;
+    width: 100%;
+  }
+}
+
+.form input,
+.form textarea,
+.form select {
+  padding: 10px;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 2px solid #2e374a;
+  border-radius: 5px;
+  color: var(--textSoft);
+}
+
+.form select {
+  width: 20%;
+}
+
+.form input {
+  width: 100%;
+}
+
+.form textarea {
+  width: 100%;
+}
+
+.form button {
+  /* width: 54%; */
+  /* 
+  background-color: teal; */
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.site {
+  display: flex;
+  flex-wrap: wrap;
+}
+.search {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}

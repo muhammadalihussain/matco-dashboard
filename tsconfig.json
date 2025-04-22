@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/middleware.ts",
+    "src/middleware.ts----",
+    "src/app/api/users/route.ts--",
+    "src/middleware.ts---1",
+    "src/app/api/signup/route.ts--",
+    "src/app/middleware.ts---3",
+    "src/app/lib/actions.ts--1",
+    "src/app/lib/actions.ts",
+    "src/app/api/auth/login/route.ts---",
+    "src/app/components/loginForm.tsx",
+    "src/app/components/loginForm.tsx---1",
+    "src/app/api/(protected)/user/route.ts---",
+    "src/app/components/navbar.tsx---",
+    "src/app/lib/context/userProvider.js",
+    "src/app/dashboard/page.tsx---",
+    "src/app/dashboard/page.tsx--2",
+    "src/app/dashboard/layout.tsx---"
+  ],
+  "exclude": ["node_modules"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}
