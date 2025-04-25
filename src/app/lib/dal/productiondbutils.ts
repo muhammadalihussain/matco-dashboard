@@ -80,7 +80,7 @@ async function getInventory(data: any) {
 
 async function getProductionOEE(data: any) {
   // console.log(data.dataSend.dataAreaId);
-  // console.log(data.dataSend.site);
+
   // console.log(moment(data.dataSend.start).format("YYYY-MM-DD"));
   // console.log(moment(data.dataSend.end).format("YYYY-MM-DD"));
   try {
@@ -120,10 +120,20 @@ async function getProductionOEE(data: any) {
 
 async function getFinishedGoodsAndBiProducts(site: any) {
   try {
-    let result = await pool
-      .request()
-      .input("site", site)
-      .execute("GetFinishedGoodsAndBiProductsBySite");
+    const result = await executeStoredProcedure(
+      "GetFinishedGoodsAndBiProductsBySite",
+      {
+        site: {
+          type: sql.NVarChar(20),
+          value: site,
+        },
+      }
+    );
+
+    // let result = await pool
+    //   .request()
+    //   .input("site", site)
+    //   .execute("GetFinishedGoodsAndBiProductsBySite");
 
     return result.recordsets[0];
   } catch (err) {

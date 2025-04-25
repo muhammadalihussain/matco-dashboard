@@ -1,4 +1,13 @@
-export function Card({ title, children }: { children: React.ReactNode }) {
+interface CardProps {
+  title?: string; // Note the ?
+  children: React.ReactNode;
+}
+
+interface TableCardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+export function Card({ title, children }: CardProps) {
   return (
     <>
       <div className="p-4 rounded-lg shadow-md h-64 flex flex-col">
@@ -15,7 +24,7 @@ export function Card({ title, children }: { children: React.ReactNode }) {
   );
 }
 
-export function TableCard({ children, className = "" }: CardProps) {
+export function TableCard({ children, className = "" }: TableCardProps) {
   return (
     <div className={`border rounded-lg p-4 shadow-md bg-white ${className}`}>
       {children}

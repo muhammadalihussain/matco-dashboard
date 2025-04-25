@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { authService } from "../services/authService"; ///app/lib/services/authService"; //services/authService
 import dayjs from "dayjs";
 
-export const UserContext = createContext(null);
+export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);

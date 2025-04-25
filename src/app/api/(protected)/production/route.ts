@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     } else if (type === "allproductiondata") {
       const result = await data.getAllProductionData();
 
-      const productionData = result[0].map((row) => ({
+      const productionData = result[0].map((row: any) => ({
         supervisor: row.supervisor,
         runningHours: row.runningHours,
         downHours: row.downHours,
@@ -40,9 +40,9 @@ export async function GET(req: Request) {
         remarks: row.remarks,
         shiftLabel: row.ShiftLabel,
       }));
-
-      const downtimeCounts = {};
-      productionData.forEach((item) => {
+      // Or alternatively:
+      const downtimeCounts: { [reason: string]: number } = {};
+      productionData.forEach((item: any) => {
         const reason = item.remarks || "Unknown";
         downtimeCounts[reason] = (downtimeCounts[reason] || 0) + 1;
       });
@@ -51,16 +51,16 @@ export async function GET(req: Request) {
         alldata: productionData,
 
         productionData: {
-          labels: productionData.map((d, i) => `Shift ${i + 1}`),
+          labels: productionData.map((d: any, i: any) => `Shift ${i + 1}`),
           datasets: [
             {
               label: "Total Running Hours",
-              data: productionData.map((d) => d.runningHours),
+              data: productionData.map((d: any) => d.runningHours),
               backgroundColor: "#4CAF50",
             },
             {
               label: "Total Down Hours",
-              data: productionData.map((d) => d.downHours),
+              data: productionData.map((d: any) => d.downHours),
               backgroundColor: "#FF5733",
             },
           ],
@@ -70,7 +70,7 @@ export async function GET(req: Request) {
           datasets: [
             {
               label: "Total Production",
-              data: productionData.map((d) => d.finalProduction),
+              data: productionData.map((d: any) => d.finalProduction),
               backgroundColor: "#007bff",
             },
           ],
@@ -80,7 +80,7 @@ export async function GET(req: Request) {
           datasets: [
             {
               label: "Bi-Product Production",
-              data: productionData.map((d) => d.biProductProduction),
+              data: productionData.map((d: any) => d.biProductProduction),
               backgroundColor: ["#f39c12", "#e74c3c", "#2ecc71"],
             },
           ],
@@ -135,34 +135,36 @@ export const POST = async (request: NextRequest) => {
 
     switch (action) {
       case "getFinishedGoodsAndBiProducts": {
+        console.log(dataSend.site);
+
         //  return NextResponse.json({ message: 'Created', data }, { status: 201 });
         const result = await data.getFinishedGoodsAndBiProducts(dataSend.site);
 
         return NextResponse.json({
           finalFinishedGoodsData: {
             labels: (result ?? [])
-              .filter((item) => item.ItemCategory === "Finished Goods") // Filter only Bi-Products
-              .map((item) => item.ItemCategory),
+              .filter((item: any) => item.ItemCategory === "Finished Goods") // Filter only Bi-Products
+              .map((item: any) => item.ItemCategory),
             datasets: [
               {
                 label: "Finished Goods",
                 data: (result ?? [])
-                  .filter((item) => item.ItemCategory === "Finished Goods") // Apply same filter
-                  .map((item) => item.OnHandQuantity),
+                  .filter((item: any) => item.ItemCategory === "Finished Goods") // Apply same filter
+                  .map((item: any) => item.OnHandQuantity),
                 backgroundColor: "#4CAF50",
               },
             ],
           },
           biProductData: {
             labels: (result ?? [])
-              .filter((item) => item.ItemCategory === "Bi-Products") // Filter only Bi-Products
-              .map((item) => item.ItemCategory),
+              .filter((item: any) => item.ItemCategory === "Bi-Products") // Filter only Bi-Products
+              .map((item: any) => item.ItemCategory),
             datasets: [
               {
                 label: "Bi-Products",
                 data: (result ?? [])
-                  .filter((item) => item.ItemCategory === "Bi-Products") // Apply same filter
-                  .map((item) => item.OnHandQuantity),
+                  .filter((item: any) => item.ItemCategory === "Bi-Products") // Apply same filter
+                  .map((item: any) => item.OnHandQuantity),
                 backgroundColor: ["#FF5733"],
               },
             ],
@@ -178,12 +180,14 @@ export const POST = async (request: NextRequest) => {
 
         return NextResponse.json({
           dispatchInventory: {
-            labels: resultDispatchInventory.map((item) => item.ItemCategory),
+            labels: resultDispatchInventory.map(
+              (item: any) => item.ItemCategory
+            ),
             datasets: [
               {
                 label: "Qty",
                 data: resultDispatchInventory.map(
-                  (item) => item.OnHandQuantity
+                  (item: any) => item.OnHandQuantity
                 ),
                 backgroundColor: ["#082567", "red", "green"],
                 // borderColor: "rgba(54, 162, 235, 1)",
@@ -197,28 +201,28 @@ export const POST = async (request: NextRequest) => {
         // return NextResponse.json({
         //   biProductsData: {
         //     labels: (resultDispatchInventory ?? [])
-        //       .filter((item) => item.ItemCategory === "BiProducts") // Filter only Bi-Products
-        //       .map((item) => item.ItemCategory),
+        //       .filter((item:any) => item.ItemCategory === "BiProducts") // Filter only Bi-Products
+        //       .map((item:any) => item.ItemCategory),
         //     datasets: [
         //       {
         //         label: "Bi-Products",
         //         data: (resultDispatchInventory ?? [])
-        //           .filter((item) => item.ItemCategory === "BiProducts") // Apply same filter
-        //           .map((item) => item.OnHandQuantity),
+        //           .filter((item:any) => item.ItemCategory === "BiProducts") // Apply same filter
+        //           .map((item:any) => item.OnHandQuantity),
         //         backgroundColor: "#4CAF50",
         //       },
         //     ],
         //   },
         //   exportData: {
         //     labels: (resultDispatchInventory ?? [])
-        //       .filter((item) => item.ItemCategory === "Export") // Filter only Bi-Products
-        //       .map((item) => item.ItemCategory),
+        //       .filter((item:any) => item.ItemCategory === "Export") // Filter only Bi-Products
+        //       .map((item:any) => item.ItemCategory),
         //     datasets: [
         //       {
         //         label: "Export",
         //         data: (resultDispatchInventory ?? [])
-        //           .filter((item) => item.ItemCategory === "Export") // Apply same filter
-        //           .map((item) => item.OnHandQuantity),
+        //           .filter((item:any) => item.ItemCategory === "Export") // Apply same filter
+        //           .map((item:any) => item.OnHandQuantity),
         //         backgroundColor: ["#FF5733"],
         //       },
         //     ],
@@ -226,14 +230,14 @@ export const POST = async (request: NextRequest) => {
 
         //   localSNDData: {
         //     labels: (resultDispatchInventory ?? [])
-        //       .filter((item) => item.ItemCategory === "LocalSND") // Filter only Bi-Products
-        //       .map((item) => item.ItemCategory),
+        //       .filter((item:any) => item.ItemCategory === "LocalSND") // Filter only Bi-Products
+        //       .map((item:any) => item.ItemCategory),
         //     datasets: [
         //       {
         //         label: "Export",
         //         data: (resultDispatchInventory ?? [])
-        //           .filter((item) => item.ItemCategory === "LocalSND") // Apply same filter
-        //           .map((item) => item.OnHandQuantity),
+        //           .filter((item:any) => item.ItemCategory === "LocalSND") // Apply same filter
+        //           .map((item:any) => item.OnHandQuantity),
         //         backgroundColor: ["#FF5733"],
         //       },
         //     ],
@@ -250,11 +254,11 @@ export const POST = async (request: NextRequest) => {
 
         return NextResponse.json({
           inventoryData: {
-            labels: resultInventory.map((item) => item.ItemCategory),
+            labels: resultInventory.map((item: any) => item.ItemCategory),
             datasets: [
               {
                 label: "Qty",
-                data: resultInventory.map((item) => item.OnHandQuantity),
+                data: resultInventory.map((item: any) => item.OnHandQuantity),
                 backgroundColor: ["#082567", "red", "#FEBE10", "green"],
                 // borderColor: "rgba(54, 162, 235, 1)",
                 borderWidth: 1,
@@ -264,11 +268,11 @@ export const POST = async (request: NextRequest) => {
           },
 
           finalProductionAllData: {
-            labels: result[1]?.map((item) => item.AllShifts),
+            labels: result[1]?.map((item: any) => item.AllShifts),
             datasets: [
               {
                 label: "Availability",
-                data: result[1]?.map((item) => item.PlantAvailability),
+                data: result[1]?.map((item: any) => item.PlantAvailability),
                 backgroundColor: "green",
                 // borderColor: "rgba(54, 162, 235, 1)",
                 borderWidth: 1,
@@ -276,7 +280,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "Performance",
-                data: result[1]?.map((item) => item.PlantPerformance),
+                data: result[1]?.map((item: any) => item.PlantPerformance),
                 backgroundColor: "#082567",
                 // borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,
@@ -284,7 +288,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "Quality",
-                data: result[1]?.map((item) => item.Quality),
+                data: result[1]?.map((item: any) => item.Quality),
                 backgroundColor: "#FEBE10",
                 // borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,
@@ -292,7 +296,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "OEE (%)",
-                data: result[1]?.map((item) => item.OEE),
+                data: result[1]?.map((item: any) => item.OEE),
                 backgroundColor: "red",
                 // borderColor: "rgba(255, 99, 132, 1)",
                 borderWidth: 1,
@@ -302,12 +306,12 @@ export const POST = async (request: NextRequest) => {
           },
 
           // inventoryData: {
-          //   labels: resultInventory.map((item) => item.Measure),
+          //   labels: resultInventory.map((item:any) => item.Measure),
 
           //   datasets: [
           //     {
           //       label: "Bi-Products",
-          //       data: resultInventory.map((item) => item.BiProducts),
+          //       data: resultInventory.map((item:any) => item.BiProducts),
           //       backgroundColor: "#4CAF50",
           //       // borderColor: "rgba(54, 162, 235, 1)",
           //       borderWidth: 1,
@@ -315,7 +319,7 @@ export const POST = async (request: NextRequest) => {
           //     },
           //     {
           //       label: "Raw",
-          //       data: resultInventory.map((item) => item.Raw),
+          //       data: resultInventory.map((item:any) => item.Raw),
           //       backgroundColor: "#FF5733",
           //       // borderColor: "rgba(75, 192, 192, 1)",
           //       borderWidth: 1,
@@ -323,7 +327,7 @@ export const POST = async (request: NextRequest) => {
           //     },
           //     {
           //       label: "Semi Finish",
-          //       data: resultInventory.map((item) => item.SemiFinish),
+          //       data: resultInventory.map((item:any) => item.SemiFinish),
           //       backgroundColor: "#00308F",
           //       // borderColor: "rgba(75, 192, 192, 1)",
           //       borderWidth: 1,
@@ -331,7 +335,7 @@ export const POST = async (request: NextRequest) => {
           //     },
           //     {
           //       label: "Finishing",
-          //       data: resultInventory.map((item) => item.Finishing),
+          //       data: resultInventory.map((item:any) => item.Finishing),
           //       backgroundColor: "#8e44ad",
           //       // borderColor: "rgba(255, 99, 132, 1)",
           //       borderWidth: 1,
@@ -341,11 +345,11 @@ export const POST = async (request: NextRequest) => {
           // },
 
           finalProductionData: {
-            labels: result[0]?.map((item) => item.ShiftName),
+            labels: result[0]?.map((item: any) => item.ShiftName),
             datasets: [
               {
                 label: "Availability",
-                data: result[0]?.map((item) => item.PlantAvailability),
+                data: result[0]?.map((item: any) => item.PlantAvailability),
                 backgroundColor: "green",
                 // borderColor: "rgba(54, 162, 235, 1)",
                 borderWidth: 1,
@@ -353,7 +357,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "Performance",
-                data: result[0]?.map((item) => item.PlantPerformance),
+                data: result[0]?.map((item: any) => item.PlantPerformance),
                 backgroundColor: "#082567",
                 // borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,
@@ -361,7 +365,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "Quality",
-                data: result[0]?.map((item) => item.Quality),
+                data: result[0]?.map((item: any) => item.Quality),
                 backgroundColor: "#FEBE10",
                 // borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,
@@ -369,7 +373,7 @@ export const POST = async (request: NextRequest) => {
               },
               {
                 label: "OEE (%)",
-                data: result[0]?.map((item) => item.OEE),
+                data: result[0]?.map((item: any) => item.OEE),
                 backgroundColor: "red",
                 // borderColor: "rgba(255, 99, 132, 1)",
                 borderWidth: 1,
@@ -385,11 +389,11 @@ export const POST = async (request: NextRequest) => {
 
       //   return NextResponse.json({
       //     inventoryData: {
-      //       labels: result.map((item) => item.ItemCategory),
+      //       labels: result.map((item:any) => item.ItemCategory),
       //       datasets: [
       //         {
       //           label: "OnHandQuantityTon",
-      //           data: result.map((item) => item.OnHandQuantity),
+      //           data: result.map((item:any) => item.OnHandQuantity),
       //           backgroundColor: "#4CAF50",
       //           // borderColor: "rgba(54, 162, 235, 1)",
       //           borderWidth: 1,

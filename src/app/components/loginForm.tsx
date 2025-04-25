@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "../lib/actions";
+// import { login } from "../lib/actions";
 import { useActionState } from "react";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
@@ -9,11 +9,10 @@ import { useFormStatus } from "react-dom";
 import { UserContext } from "@/app/lib/context/userProvider";
 import { ToastContainer, toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
+
 const LoginForm = () => {
   // const [state, formAction] = useActionState<any, FormData>(login, undefined);
   // const { pending } = useFormStatus();
-
-  const context = useContext(UserContext);
 
   const date = new Date().getFullYear();
   const [password, setPassword] = useState("");
@@ -21,12 +20,10 @@ const LoginForm = () => {
 
   const [error, setError] = useState("");
 
-  const { login, loading } = context;
-
   const [isLoading, setIsLoading] = useState(false);
-
+  const context = useContext(UserContext);
+  const { login, loading } = context;
   const handleLogin = async () => {
-    setIsLoading(true);
     setError(""); // Clear previous errors
 
     if (!email || !password) {
@@ -35,12 +32,18 @@ const LoginForm = () => {
       return;
     }
 
+    // Get context with null check
+
     const result = await login(email, password);
 
     if (!result.success) {
-      toast.error(result.error);
-      setError(result.error);
-      setIsLoading(false);
+      if (result.error) {
+        toast.error(result.error);
+        setError(result.error);
+        setIsLoading(false);
+      } else {
+        toast.error("Login failed"); // Default error message
+      }
     }
   };
 

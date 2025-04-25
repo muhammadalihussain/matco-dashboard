@@ -2,7 +2,10 @@
 // import Cookies from "js-cookie";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
+//const API_URL = "http://localhost:3000/api";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // Login API Call
 export const dashboardService = {
   getProductionDate: async () => {
@@ -10,7 +13,7 @@ export const dashboardService = {
     if (!token) return null;
 
     try {
-      const response = await axios.get(`${API_URL}/productiondashboard`, {
+      const response = await axios.get(`${API_URL}/api/productiondashboard`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -28,7 +31,7 @@ export const dashboardService = {
 
     try {
       const response = await axios.get(
-        `${API_URL}/production?type=allproductiondata`,
+        `${API_URL}/api/production?type=allproductiondata`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +52,7 @@ export const dashboardService = {
 
     try {
       const response = await axios.post(
-        `${API_URL}/production`,
+        `${API_URL}/api/production`,
         {
           action: "getProductionOEE",
           dataSend: data,
@@ -73,7 +76,7 @@ export const dashboardService = {
 
     try {
       const response = await axios.post(
-        `${API_URL}/production`,
+        `${API_URL}/api/production`,
         {
           action: "getDispatchInventory",
           dataSend: data,
@@ -99,7 +102,7 @@ export const dashboardService = {
 
     try {
       const res = await axios.post(
-        `${API_URL}/production`,
+        `${API_URL}/api/production`,
         { site },
         {
           headers: { Authorization: `Bearer ${token}` },

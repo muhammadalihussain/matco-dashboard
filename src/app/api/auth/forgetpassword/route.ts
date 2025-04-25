@@ -22,14 +22,16 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const token = await GenerateTokenReset({
-      username: user.username,
-      userId: user.Id,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      isActive: user.isActive,
-      isLoggedIn: true,
-    });
+    const token = await GenerateTokenReset(
+      JSON.stringify({
+        username: user.username,
+        userId: user.Id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isActive: user.isActive,
+        isLoggedIn: true,
+      })
+    );
 
     await SendEmail(user.username, user.email, token);
 

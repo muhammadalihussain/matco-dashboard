@@ -1,4 +1,4 @@
-const sql = require("mssql");
+import * as sql from "mssql";
 const configuration = require("../../lib/config/dbconfig");
 
 // const configuration = {
@@ -70,7 +70,7 @@ const configuration = require("../../lib/config/dbconfig");
 
 // Global connection pool
 let pool: sql.ConnectionPool;
-let poolConnectPromise: Promise<sql.ConnectionPool>;
+let poolConnectPromise: Promise<sql.ConnectionPool> | null = null;
 
 async function getPool(): Promise<sql.ConnectionPool> {
   if (pool) return pool;
@@ -90,6 +90,20 @@ async function getPool(): Promise<sql.ConnectionPool> {
   return poolConnectPromise;
 }
 
+interface SqlParameter {
+  value?: any;
+  type?: any;
+  options?: any;
+}
+
+function isSqlParameter(value: unknown): value is SqlParameter {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("value" in value || "type" in value || "options" in value)
+  );
+}
+
 async function executeStoredProcedure(procedureName: any, params = {}) {
   const pool = await getPool();
   const request = pool.request();
@@ -98,9 +112,9 @@ async function executeStoredProcedure(procedureName: any, params = {}) {
   Object.entries(params).forEach(([name, value]) => {
     const paramConfig = {
       name,
-      value: value.value !== undefined ? value.value : value,
-      type: value.type || sql.NVarChar,
-      options: value.options || {},
+      value: isSqlParameter(value) ? value.value : value,
+      type: isSqlParameter(value) ? value.type : sql.NVarChar,
+      options: isSqlParameter(value) ? value.options : {},
     };
     request.input(name, paramConfig.type, paramConfig.value);
   });

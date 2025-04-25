@@ -155,7 +155,7 @@ async function GetAllRole() {
   // }
 }
 
-async function GetSitesByUserId(id) {
+async function GetSitesByUserId(id: any) {
   try {
     const result = await executeStoredProcedure("GetSitesByUserId", {
       UserId: { type: sql.Int, value: id },
@@ -191,7 +191,7 @@ async function GetSitesByUserId(id) {
   // }
 }
 
-async function GetAllInventSite(id) {
+async function GetAllInventSite(id: any) {
   try {
     const result = await executeStoredProcedure("GetAllINVENTSITE", {
       DataAreaId: { type: sql.NVarChar, value: id },
@@ -227,7 +227,7 @@ async function GetAllInventSite(id) {
   // }
 }
 
-async function GetMenusByRole(id) {
+async function GetMenusByRole(id: any) {
   try {
     const result = await executeStoredProcedure("GetMenusByRole", {
       id: { type: sql.Int, value: id },
@@ -264,7 +264,13 @@ async function GetMenusByRole(id) {
 
 //https://codeomelet.com/posts/crafting-paginated-api-with-nodejs-and-mssql1
 
-async function getAllUsersBySearch(q, page, ITEM_PER_PAGE, orderBy, orderDir) {
+async function getAllUsersBySearch(
+  q: any,
+  page: any,
+  ITEM_PER_PAGE: any,
+  orderBy: any,
+  orderDir: any
+) {
   try {
     const result = await executeStoredProcedure("usp_UserPagination", {
       page: {
@@ -339,7 +345,7 @@ async function getAllUsersBySearch(q, page, ITEM_PER_PAGE, orderBy, orderDir) {
   // }
 }
 
-async function ProductfindById(id) {
+async function ProductfindById(id: any) {
   try {
     let pool = await sql1.connect(config1);
 
@@ -358,7 +364,7 @@ async function ProductfindById(id) {
   }
 }
 
-async function UpdateUserPassword(userId, password) {
+async function UpdateUserPassword(userId: any, password: any) {
   try {
     const result = await executeStoredProcedure("UpdateUserPassword", {
       userId: { type: sql.NVarChar, value: userId },
@@ -395,7 +401,7 @@ async function UpdateUserPassword(userId, password) {
   // }
 }
 
-async function UserfindById(id) {
+async function UserfindById(id: any) {
   // console.log(id);
   try {
     const result = await executeStoredProcedure("UserfindById", {
@@ -428,7 +434,12 @@ async function UserfindById(id) {
   // }
 }
 
-async function getAllProductsBySearch(q, page, orderBy, orderDir) {
+async function getAllProductsBySearch(
+  q: any,
+  page: any,
+  orderBy: any,
+  orderDir: any
+) {
   try {
     let pool = await sql1.connect(config1);
     const ITEM_PER_PAGE = 5;
@@ -462,7 +473,7 @@ async function getAllProductsBySearch(q, page, orderBy, orderDir) {
   }
 }
 
-async function findUserByIdAndUpdate(id, user) {
+async function findUserByIdAndUpdate(id: any, user: any) {
   try {
     const result = await executeStoredProcedure("findUserByIdAndUpdate", {
       id: {
@@ -552,7 +563,7 @@ async function findUserByIdAndUpdate(id, user) {
   // }
 }
 
-async function addUser(user) {
+async function addUser(user: any) {
   try {
     const result = await executeStoredProcedure("InsertUser", {
       username: {
@@ -634,7 +645,7 @@ async function addUser(user) {
   // }
 }
 
-async function deleteUser(id) {
+async function deleteUser(id: any) {
   try {
     const result = await executeStoredProcedure("deleteUser", {
       id: { type: sql.Int, value: id },
@@ -675,7 +686,7 @@ async function deleteUser(id) {
   // }
 }
 
-async function findProductByIdAndUpdate(id, product) {
+async function findProductByIdAndUpdate(id: any, product: any) {
   try {
     let pool = await sql1.connect(config1);
     let updateProduct = await pool
@@ -702,7 +713,7 @@ async function findProductByIdAndUpdate(id, product) {
   }
 }
 
-async function addProduct(product) {
+async function addProduct(product: any) {
   try {
     let pool = await sql1.connect(config1);
     let insertProduct = await pool
@@ -729,7 +740,7 @@ async function addProduct(product) {
   }
 }
 
-async function deleteProduct(id) {
+async function deleteProduct(id: any) {
   try {
     let pool = await sql1.connect(config1);
     let deleteProd = await pool
